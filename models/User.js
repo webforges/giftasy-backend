@@ -11,6 +11,9 @@ const addressSchema = new mongoose.Schema({
 
 const userSchema = new mongoose.Schema(
   {
+    name: {
+      type: String,
+    },
     email: {
       type: String,
       required: true,

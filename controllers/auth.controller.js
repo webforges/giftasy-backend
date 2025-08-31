@@ -5,7 +5,7 @@ import User from "../models/User.js";
 // REGISTER
 export const register = async (req, res) => {
   try {
-    const { email, password, phone, whatsappNumber, address } = req.body;
+    const { email, password } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser)
@@ -14,9 +14,6 @@ export const register = async (req, res) => {
     const user = new User({
       email,
       password,
-      phone,
-      whatsappNumber,
-      address,
     });
 
     await user.save();
@@ -51,10 +48,9 @@ export const login = async (req, res) => {
 // GET USER PROFILE (Protected)
 export const getProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("-password");
-    if (!user) return res.status(404).json({ message: "User not found" });
-
-    res.json(user);
+    if (!req.user) return res.status(404).json({ message: "User not found" });
+    const user = req.user;
+    res.json({ message: "Profile fetched successfully", user });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
@@ -63,11 +59,12 @@ export const getProfile = async (req, res) => {
 // UPDATE USER PROFILE (Protected)
 export const updateProfile = async (req, res) => {
   try {
-    const { email, phone, whatsappNumber, address, password } = req.body;
+    const { name,email, phone, whatsappNumber, address, password } = req.body;
 
     const user = await User.findById(req.user.id);
     if (!user) return res.status(404).json({ message: "User not found" });
 
+    if (name) user.name = name;
     if (email) user.email = email;
     if (phone) user.phone = phone;
     if (whatsappNumber) user.whatsappNumber = whatsappNumber;
