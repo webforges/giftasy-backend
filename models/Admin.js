@@ -3,7 +3,7 @@ import { hashPassword, comparePassword } from "../utils/hashPassword.js";
 
 const adminSchema = new mongoose.Schema(
   {
-    adminId: { type: String, required: true, unique: true }, // custom unique ID for admin
+    adminId: { type: String, required: true, unique: true }, 
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
   },
@@ -13,13 +13,13 @@ const adminSchema = new mongoose.Schema(
 // 🔐 Hash password before saving
 adminSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
-  this.password = await hashPassword(this.password); // use utils
+  this.password = await hashPassword(this.password); 
   next();
 });
 
 // ✅ Compare password for login
 adminSchema.methods.matchPassword = async function (enteredPassword) {
-  return await comparePassword(enteredPassword, this.password); // use utils
+  return await comparePassword(enteredPassword, this.password); 
 };
 
 const Admin = mongoose.model("Admin", adminSchema);

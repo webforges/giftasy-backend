@@ -14,7 +14,7 @@ describe("Auth API", () => {
 
   beforeAll(async () => {
     // Connect to test DB
-    const mongoUri = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/giftasy_test";
+    const mongoUri = process.env.TEST_MONGO_URI || "mongodb://127.0.0.1:27017/giftasy_test";
     await mongoose.connect(mongoUri);
   });
 
@@ -76,6 +76,7 @@ describe("Auth API", () => {
     expect(res.statusCode).toBe(200);
     expect(res.body).toHaveProperty("message", "Profile updated successfully");
   });
+  
 
   // 5️⃣ Test deleting profile
   it("should delete user profile", async () => {
